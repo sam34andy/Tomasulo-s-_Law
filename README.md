@@ -16,10 +16,17 @@
 
 ### 編譯方式:
 	1.使用Dev-C++、Visual Studio等程式完成編譯
-	2.linux "g++ hw3.cpp HW3.txt -o hw3"
+	2.linux "g++ hw2.cpp ASSEMBLY_HW2.txt -o hw3"
 	
 ### 範例input(using txt file "HW3.txt"):
-
+	ADDI F1, F2, 1
+	SUB F1, F3, F4
+	DIV F1, F2, F3
+	MUL F2, F3, F4
+	ADD F2, F4, F2
+	ADDI F4, F1, 2
+	MUL F5, F5, F5
+	ADD F1, F4, F4	
 
 ### 範例output:
 
