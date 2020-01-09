@@ -46,11 +46,12 @@
 	void Tomasulo_Dispatch_Buffer_Assign(RS_Buffer &, int, int);
 	void ready_set_sorting();
 	void Cycle_print(int);
-Run_Tomasulo 
-	-> Tomasulo_Check_Buffer_Status //確認當前兩個ALU是否有instruction執行完畢。是，則釋出空間，讓相對應準備好的其他instruction開始執行。
-	-> Tomasulo_Issue //執行Issue
-		-> Tomasulo_Issue_Check_RAT //確認RF與RAT中的名字，將正確的Register name放進RS中
-	-> Tomasulo_Dispatch //執行Dispatch
-		-> Tomasulo_Dispatch_Scan_RS //確認當前RS中有沒有已經可以Dispatch的instruction
-		-> Tomasulo_Dispatch_Buffer_Assign //把Dispatch的instruction寫進相對應的加/乘法ALU中
-		-> ready_set_sorting //在遇上兩個同類instruction都可以用Dispatch時，會使用FIFO。ready_set確保先issue的instruction會先被執行。
+	Run_Tomasulo 
+		-> Tomasulo_Check_Buffer_Status //確認當前兩個ALU是否有instruction執行完畢。釋出空間，讓相對應準備好的其他instruction開始執行。
+		-> Tomasulo_Issue //執行Issue
+			-> Tomasulo_Issue_Check_RAT //確認RF與RAT中的名字，將正確的Register name放進RS中
+		-> Tomasulo_Dispatch //執行Dispatch
+			-> Tomasulo_Dispatch_Scan_RS //確認當前RS中有沒有已經可以Dispatch的instruction
+			-> Tomasulo_Dispatch_Buffer_Assign //把Dispatch的instruction寫進相對應的加/乘法ALU中
+			-> ready_set_sorting //ready_set確保先issue的instruction會先被執行。
+						
