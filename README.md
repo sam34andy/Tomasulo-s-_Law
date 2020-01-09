@@ -36,7 +36,43 @@
 ![image](https://github.com/sam34andy/Tomasulo-s-_Law/blob/master/output2.JPG)
 
 ### 程式碼內容:
-	void Initialization();
+	1.同一RS位置，如果write back釋出了位置，可以在同cycle將其他instruction issue到相同位置。
+	2.數值的儲存型態為float。
+#### 資料型態與其他:
+	struct Register2 { // 
+		string name;
+		string replace_name;
+	};
+	struct RS_Line{
+		string NAME;
+		bool busy;                        
+		char operation; // +,-,*,/
+		float former; 
+		float later;
+		string former_s;
+		string later_s;
+		bool dispatch;
+		bool execution;
+		int execu_priority;
+	};
+	struct RS_Buffer{
+		bool busy;
+		string RS_name;
+		string register_name;
+		char operation;
+		float former;
+		float later;
+		int finish_cycle;
+	};
+	vector<Register> RF;
+	vector<Register2> RAT;
+	vector<RS_Line> RS; // ADD(0~2)+MUL(3&4)
+	vector<int> ready_set; //儲存已經準備好可以執行的RS[i]
+	RS_Buffer Buffer_Add; //加法ALU
+	RS_Buffer Buffer_Mul; //乘法ALU
+	
+#### 全部的function與呼叫順序:
+	void Initialization(); //程式剛執行時為各個程式做初始化
 	void Run_Tomasulo();
 	void Tomasulo_Check_Buffer_Status(RS_Buffer &, bool, int);
 	void Tomasulo_Issue(int, int);
@@ -45,7 +81,8 @@
 	void Tomasulo_Dispatch_Scan_RS(bool, int);
 	void Tomasulo_Dispatch_Buffer_Assign(RS_Buffer &, int, int);
 	void ready_set_sorting();
-	void Cycle_print(int);
+	void Cycle_print(int); //印刷出cycle的結果
+	
 	Run_Tomasulo 
 		-> Tomasulo_Check_Buffer_Status //確認當前兩個ALU是否有instruction執行完畢。釋出空間，讓相對應準備好的其他instruction開始執行。
 		-> Tomasulo_Issue //執行Issue
@@ -54,4 +91,8 @@
 			-> Tomasulo_Dispatch_Scan_RS //確認當前RS中有沒有已經可以Dispatch的instruction
 			-> Tomasulo_Dispatch_Buffer_Assign //把Dispatch的instruction寫進相對應的加/乘法ALU中
 			-> ready_set_sorting //ready_set確保先issue的instruction會先被執行。
-						
+	
+	註: Run_Tomasulo -> Tomasulo_Check_Buffer_Status 表前者的執行function中呼叫了後者。
+	
+
+
