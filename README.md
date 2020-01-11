@@ -71,7 +71,7 @@
 	RS_Buffer Buffer_Add; //加法ALU
 	RS_Buffer Buffer_Mul; //乘法ALU
 	
-#### 全部的function與呼叫順序:
+#### 程式碼呼叫順序與函式執行內容:
 	void Initialization(); //程式剛執行時為各個程式做初始化
 	void Run_Tomasulo();
 	void Tomasulo_Check_Buffer_Status(RS_Buffer &, bool, int);
