@@ -1,7 +1,5 @@
 # Tomasulo-s-_Law
 2019 Data Structure Course Homework Two
-# Cache_Replacement
-2019 Data Structure Course Homework Three
 
 ### 題目: Tomasulo's Law
 
