@@ -1,4 +1,4 @@
-// hw2.cpp : ¦¹ÀÉ®×¥]§t 'main' ¨ç¦¡¡Cµ{¦¡·|©ó¸Ó³B¶}©l°õ¦æ¤Îµ²§ô°õ¦æ¡C
+// hw2.cpp : æ­¤æª”æ¡ˆåŒ…å« 'main' å‡½å¼ã€‚ç¨‹å¼æœƒæ–¼è©²è™•é–‹å§‹åŸ·è¡ŒåŠçµæŸåŸ·è¡Œã€‚
 //
 
 #include <iostream>
@@ -53,7 +53,7 @@ struct RS_Line{
 struct RS_Buffer{
 	bool busy;
 	string RS_name;
-	string register_name; // ¦n¹³¥Î¤£¨ì?
+	string register_name; // å¥½åƒç”¨ä¸åˆ°?
 	char operation;
 	float former;
 	float later;
@@ -86,52 +86,38 @@ int main(){
 	string content;
 	ifstream myfile("ASSEMBLY_HW2.txt"); // ifstream myfile("ASSEMBLY_Test.txt");
 	if (myfile.is_open())
-		while (getline(myfile, content)) // ¥i¥H¤@¦¸Åª¤@¦æ
+		while (getline(myfile, content)) // å¯ä»¥ä¸€æ¬¡è®€ä¸€è¡Œ
 		{
 			Inst_history.push_back({ content, 0, 0, 0 });
-			txt_file_string_cut(content, inst_counter); // ¶Ç¤J¦r¦ê¥»Åé»P¦r¦êªº§Ç¼Æ
+			txt_file_string_cut(content, inst_counter); // å‚³å…¥å­—ä¸²æœ¬é«”èˆ‡å­—ä¸²çš„åºæ•¸
 			inst_counter++;
 		}
 
-	// cout << "total register number" << total_register_number << endl;
-
 	Initialization();
 	Run_Tomasulo();
-	// Cycle_print(0);
 	
-
-	// For debug
-	//for (int i = 0; i < inst_counter; i++)
-	//{
-	//	cout << Inst_history[i] << "\t"
-	//		<< Inst[i].Type << " "
-	//		<< Inst[i].D_Reg.name << "+" << Inst[i].D_Reg.value << " "
-	//		<< Inst[i].InputA_Reg.name << "+" << Inst[i].InputA_Reg.value << " "
-	//		<< Inst[i].InputB_Reg.name << "+" << Inst[i].InputB_Reg.value << " "
-	//		<< Inst[i].immed << endl;
-	//}
 	system("pause");
 }
-void txt_file_string_cut(string content, int inst_n) // ¶i¦æ¦r¦ê³B²z
+void txt_file_string_cut(string content, int inst_n) // é€²è¡Œå­—ä¸²è™•ç†
 {
 	Instruction inst = { "", {"", -1}, {"", -1}, {"", -1}, NULL };
 	Inst.push_back(inst);
 	string extract = "";
 
-	// ºI¥X¤@¬q¤å¦r
+	// æˆªå‡ºä¸€æ®µæ–‡å­—
 	while (true)
 	{
 		int start = content.find_first_not_of(" \t,:"); //cout << start << "\t";
 		int end = content.find_first_of(" \t,:\n"); //cout << end << "\t";
 		extract = content.substr(0, end);
-		Instruction_Extract_Data_Saving(extract, inst_n, content.length()); // §â¨ú¥X¨ÓªºªF¦è¥á¶iData_Saving§PÂ_¦r¦êªººØÃş¨ÃÀx¦s
+		Instruction_Extract_Data_Saving(extract, inst_n, content.length()); // æŠŠå–å‡ºä¾†çš„æ±è¥¿ä¸Ÿé€²Data_Savingåˆ¤æ–·å­—ä¸²çš„ç¨®é¡ä¸¦å„²å­˜
 		if (end == -1)
 			return;
 
-		//¹ï¦r¦ê°µ¾ã²z
+		//å°å­—ä¸²åšæ•´ç†
 		content = content.substr(end, content.length() - extract.length());
 		int split_n = content.find_first_not_of("\t, :");
-		if (split_n == string::npos) // ¦pªG¤w¸g¨ì¦r¦ê§À¤Ú´N¸õ¥X
+		if (split_n == string::npos) // å¦‚æœå·²ç¶“åˆ°å­—ä¸²å°¾å·´å°±è·³å‡º
 			return;
 		content = content.substr(split_n, content.length() - split_n + 1);
 		//cout << "." << content << endl;
@@ -139,7 +125,7 @@ void txt_file_string_cut(string content, int inst_n) // ¶i¦æ¦r¦ê³B²z
 }
 void Instruction_Extract_Data_Saving(string s, int inst, int rest_n)
 {
-	stringstream geek(s); // ¨ú¥Ximmediate
+	stringstream geek(s); // å–å‡ºimmediate
 	int x;
 	if (geek >> x)
 	{
@@ -154,7 +140,7 @@ void Instruction_Extract_Data_Saving(string s, int inst, int rest_n)
 		if (total_register_number < int_s_value)
 			total_register_number = int_s_value;
 
-		if (Inst[inst].D_Reg.value == -1) // ¦s¶iDestination Register
+		if (Inst[inst].D_Reg.value == -1) // å­˜é€²Destination Register
 		{
 			Inst[inst].D_Reg.name = s;
 			Inst[inst].D_Reg.value = int_s_value;
@@ -206,13 +192,13 @@ void Initialization()
 	
 }
 void Run_Tomasulo() {    
-	int cycle_number = 0; // ªì©l¬°0¡A©Ò¥H³Ì«á¿é¥X®É­n¥[1
-	int issue_number = 0; // ¥Ø«eissue¨ì­ş­Óinstruction¤F // ¥¿·Ç³Æissue²Ä´X±øinstruction?
+	int cycle_number = 0; // åˆå§‹ç‚º0ï¼Œæ‰€ä»¥æœ€å¾Œè¼¸å‡ºæ™‚è¦åŠ 1
+	int issue_number = 0; // ç›®å‰issueåˆ°å“ªå€‹instructionäº† // æ­£æº–å‚™issueç¬¬å¹¾æ¢instruction?
 	int RS_pointer = -1;
 	bool issue_add = false;
 
 	while (true){
-		// ²Ä¤@­ÓCycle®É¡A³o­Ówhile¸Ì¥Nªí¥Lªº¼Æ¦r·|¬Ocycle_number = 0¡C
+		// ç¬¬ä¸€å€‹Cycleæ™‚ï¼Œé€™å€‹whileè£¡ä»£è¡¨ä»–çš„æ•¸å­—æœƒæ˜¯cycle_number = 0ã€‚
 		RS_pointer = -1;
 		issue_add = false;
 
@@ -223,14 +209,13 @@ void Run_Tomasulo() {
 
 		// ------------------------------ Issue ------------------------------
 		// check whether there have empty space in RS to issue data
-		// int issue_pointer = -1; // 
 
 		if (issue_number < Inst.size())
 		{
 			string type = Inst[issue_number].Type;
 			if ((type == "ADD") || (type == "ADDI") || (type == "SUB") || (type == "SUBI"))
 				for (int i = 0; i < 3; i++)
-					if (RS[i].busy == false) { // ¥Ñ¤W¦Ó¤U§äRSªÅ¦ì
+					if (RS[i].busy == false) { // ç”±ä¸Šè€Œä¸‹æ‰¾RSç©ºä½
 						RS[i].busy = true;
 						RS_pointer = i;
 						break;
@@ -245,7 +230,7 @@ void Run_Tomasulo() {
 					}
 
 			if (RS_pointer != -1) {
-				Tomasulo_Issue(issue_number, RS_pointer); // RS_pointer¦b³o¸Ì¬O¥i¥H¶ë¶i¥hªº¦ì¸m
+				Tomasulo_Issue(issue_number, RS_pointer); // RS_pointeråœ¨é€™è£¡æ˜¯å¯ä»¥å¡é€²å»çš„ä½ç½®
 				Inst_history[issue_number].issue_cycle = (cycle_number + 1);
 				issue_add = true;
 			}
@@ -259,7 +244,7 @@ void Run_Tomasulo() {
 		Cycle_print(cycle_number);
 		cycle_number++;
 
-		if (issue_number == Inst.size()) // Instruction¥ş³¡°µ§¹->¸õ¥X
+		if (issue_number == Inst.size()) // Instructionå…¨éƒ¨åšå®Œ->è·³å‡º
 		{
 			if ((Buffer_Add.busy == false) && (Buffer_Mul.busy == false))
 				break;
@@ -291,7 +276,7 @@ void Tomasulo_Check_Buffer_Status(RS_Buffer &buffer, bool ADD, int cycle_number)
 			break;
 		}
 
-		// ½T»{RAT¤¤¦³¨S¦³¬ÛÀ³ªº¦W¦r
+		// ç¢ºèªRATä¸­æœ‰æ²’æœ‰ç›¸æ‡‰çš„åå­—
 		for (int i = 0; i < total_register_number; i++) { 
 			if (RAT[i].replace_name == buffer.RS_name) { 
 				RAT[i].replace_name = "";
@@ -299,7 +284,7 @@ void Tomasulo_Check_Buffer_Status(RS_Buffer &buffer, bool ADD, int cycle_number)
 			}
 		}
 
-		// §âRS¤¤¬Û¹ïÀ³ªº¸ê®Æµ¹¨ú¥N±¼
+		// æŠŠRSä¸­ç›¸å°æ‡‰çš„è³‡æ–™çµ¦å–ä»£æ‰
 		for (int i = 0; i < 5; i++) {
 			if (RS[i].former_s == buffer.RS_name) {
 				RS[i].former = result;
@@ -310,31 +295,8 @@ void Tomasulo_Check_Buffer_Status(RS_Buffer &buffer, bool ADD, int cycle_number)
 				RS[i].later_s = "";
 			}
 		}
-		//if (ADD == true){ 
-		//	for (int i = 0; i < 3; i++) {
-		//		if (RS[i].former_s == buffer.RS_name) {
-		//			RS[i].former = result;
-		//			RS[i].former_s = "";
-		//		}
-		//		if (RS[i].later_s == buffer.RS_name) {
-		//			RS[i].later = result;
-		//			RS[i].later_s = "";
-		//		}
-		//	}
-		//}
-		//if (ADD == false) {
-		//	for (int i = 3; i < 5; i++) {
-		//		if (RS[i].former_s == buffer.RS_name) {
-		//			RS[i].former = result;
-		//			RS[i].former_s = "";
-		//		}
-		//		if (RS[i].later_s == buffer.RS_name) {
-		//			RS[i].later = result;
-		//			RS[i].later_s = "";
-		//		}
-		//	}
-		//}
-		//  ²MªÅ­ì¥»¦û¾Ú¦ì¸mªºRS Line
+		
+		//  æ¸…ç©ºåŸæœ¬ä½”æ“šä½ç½®çš„RS Line
 		for (int i = 0; i < 5; i++) {
 			if (RS[i].NAME == buffer.RS_name) {
 				RS[i] = { buffer.RS_name, false, '.', NULL, NULL, "", "", false, false, 0 };
@@ -342,9 +304,8 @@ void Tomasulo_Check_Buffer_Status(RS_Buffer &buffer, bool ADD, int cycle_number)
 			}
 		}
 
-		// ²MªÅBufferªº¸ê®Æ
+		// æ¸…ç©ºBufferçš„è³‡æ–™
 		buffer = { false, "","",'.', NULL, NULL, NULL};
-		
 	}
 	else
 		return;
@@ -367,7 +328,7 @@ void Tomasulo_Issue(int issue_number, int RS_pointer) {
 		int RAT_pointer = 0;
 		// InputA 
 		// -> InputB + immediate
-		// -> Destination // Destination­n³Ì«á°µ¡C¦]¬°¦³¿é¤J»P¿é¥XªºRegister¦W¦r¤@¼Ëªº±¡ªp
+		// -> Destination // Destinationè¦æœ€å¾Œåšã€‚å› ç‚ºæœ‰è¼¸å…¥èˆ‡è¼¸å‡ºçš„Registeråå­—ä¸€æ¨£çš„æƒ…æ³
 		Tomasulo_Issue_Check_RAT(1, Inst[issue_number].InputA_Reg.name, issue_number, RS_pointer);
 		if ((Inst[issue_number].Type == "ADDI") || (Inst[issue_number].Type == "SUBI"))
 			Tomasulo_Issue_Check_RAT(22, Inst[issue_number].InputB_Reg.name, issue_number, RS_pointer); // immediate
@@ -384,9 +345,9 @@ void Tomasulo_Issue_Check_RAT(int D_Reg, string R, int issue_number, int RS_poin
 	}
 	
 	for (int i = 0; i < total_register_number; i++) {
-		if (RAT[i].name == R) // µo²{RAT
+		if (RAT[i].name == R) // ç™¼ç¾RAT
 		{
-			if (D_Reg == 0) { // Destination Register -> ¤£ºŞ­ì¥»¦³¨S¦³¸ê®Æ³£­nÂĞ¼g¹L¥h			
+			if (D_Reg == 0) { // Destination Register -> ä¸ç®¡åŸæœ¬æœ‰æ²’æœ‰è³‡æ–™éƒ½è¦è¦†å¯«éå»			
 				RAT[i].replace_name = RS[RS_pointer].NAME;
 				break;
 			}
@@ -411,9 +372,9 @@ void Tomasulo_Issue_Check_RAT(int D_Reg, string R, int issue_number, int RS_poin
 }
 void Tomasulo_Dispatch(bool d, int cycle)
 {
-	Tomasulo_Dispatch_Scan_RS(true, cycle); // ³o¨â­Ó¥i¤£¥i¥H¦X¤@°_°µ°Ú?
+	Tomasulo_Dispatch_Scan_RS(true, cycle); // é€™å…©å€‹å¯ä¸å¯ä»¥åˆä¸€èµ·åšå•Š?
 	Tomasulo_Dispatch_Scan_RS(false, cycle);
-	ready_set_sorting();// ³oÃä­n©ñ¤@­Óready_set_sorting
+	ready_set_sorting();// é€™é‚Šè¦æ”¾ä¸€å€‹ready_set_sorting
 	int tag = 0;
 	if (Buffer_Add.busy == false) {
 		if (ready_set.size() > 0)
@@ -424,7 +385,7 @@ void Tomasulo_Dispatch(bool d, int cycle)
 					RS[ready_set[tag]].execution = true;
 					Inst_history[RS[ready_set[tag]].execu_priority].execu_cycle = cycle;
 					Tomasulo_Dispatch_Buffer_Assign(Buffer_Add, ready_set[tag], cycle);
-					ready_set.erase(ready_set.begin() + tag);// »İ­n§â¤w¸g°µ¦nªº¥ô°È±qready_set¤¤§R°£
+					ready_set.erase(ready_set.begin() + tag);// éœ€è¦æŠŠå·²ç¶“åšå¥½çš„ä»»å‹™å¾ready_setä¸­åˆªé™¤
 					break;
 				}
 			}
@@ -480,7 +441,7 @@ void Tomasulo_Dispatch_Scan_RS(bool Add, int cycle) {
 	}
 }
 void Tomasulo_Dispatch_Buffer_Assign(RS_Buffer &buffer, int RS_pointer, int cycle) {
-	// ­n§ä¾÷·|§âexecution_cycle ¸òwb_cycleªº¼Æ¦r¼g¶iInst_history
+	// è¦æ‰¾æ©ŸæœƒæŠŠexecution_cycle è·Ÿwb_cycleçš„æ•¸å­—å¯«é€²Inst_history
 	buffer.busy = true;
 	buffer.RS_name = RS[RS_pointer].NAME;
 	buffer.operation = RS[RS_pointer].operation;
@@ -501,8 +462,7 @@ void Tomasulo_Dispatch_Buffer_Assign(RS_Buffer &buffer, int RS_pointer, int cycl
 }
 
 void ready_set_sorting() {
-	if (ready_set.size() > 0)
-	{
+	if (ready_set.size() > 0){
 		int temp = 0;
 		for (int i = 0; i < ready_set.size(); i++) {
 			for (int j = 0; j < ready_set.size(); j++) {
@@ -520,19 +480,19 @@ void Cycle_print(int cycle_number)
 	cout << "Cycle: " << (cycle_number + 1) << endl;
 	// cycle_number = cycle_number - 1;
 
-	// ¿é¥XRF
-	cout << "¡iRF¡j" << endl;
+	// è¼¸å‡ºRF
+	cout << "ã€RFã€‘" << endl;
 	for (int i = 0; i < total_register_number; i++) 
 		cout << "[" << RF[i].name << ":" << RF[i].value << "] ";
 
-	// ¿é¥XRAT
-	cout << endl << "¡iRAT¡j" << endl;
+	// è¼¸å‡ºRAT
+	cout << endl << "ã€RATã€‘" << endl;
 	for(int i = 0; i <total_register_number; i++)
 		cout << "[" << RAT[i].name << ":" << RAT[i].replace_name << "] ";
 
-	// ¿é¥XALU
+	// è¼¸å‡ºALU
 	string f, l;
-	cout << endl << "¡iRS¡j" << endl;
+	cout << endl << "ã€RSã€‘" << endl;
 	for (int i = 0; i < RS.size(); i++) {
 		cout << RS[i].NAME;
 			if (RS[i].busy == true){
@@ -551,10 +511,3 @@ void Cycle_print(int cycle_number)
 
 	cout << endl << endl;
 }
-// ½T©w¥i¥H¥¿±`Åª¨ú¤å¥»
-	// §@·~2¨S¦³Addressªº³B²z¡A»İ­n§ïCode
-// ¥ÎÅã¥ÜPrint Outªº¤è¦¡½T»{»İ­n­ş¨Ç¸ê®Æµ²ºc & ªì©l¤Æ¥L­Ì
-// ½T©wParser¥i¥H¥¿±`¹B§@(¤p¼g§ï¤j¼g¡B§âJump¨º¨Çªº³¡¤Àµ¹§R±¼)
-
-
-// Buffer«ç¿ì???QwQ
