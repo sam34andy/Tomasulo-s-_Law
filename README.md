@@ -68,8 +68,6 @@
 	vector<int> ready_set; //儲存已經準備好可以執行的RS[i]
 	RS_Buffer Buffer_Add; //加法ALU
 	RS_Buffer Buffer_Mul; //乘法ALU
-	
-#### 程式碼呼叫順序與函式執行內容:
 	void Initialization(); //程式剛執行時為各個程式做初始化
 	void Run_Tomasulo();
 	void Tomasulo_Check_Buffer_Status(RS_Buffer &, bool, int);
@@ -81,6 +79,7 @@
 	void ready_set_sorting();
 	void Cycle_print(int); //印刷出cycle的結果
 	
+#### 程式碼呼叫順序與函式執行內容:
 	Run_Tomasulo 
 		-> Tomasulo_Check_Buffer_Status //確認當前兩個ALU是否有instruction執行完畢。釋出空間，讓相對應準備好的其他instruction開始執行。
 		-> Tomasulo_Issue //執行Issue
@@ -92,5 +91,5 @@
 	
 	註: Run_Tomasulo -> Tomasulo_Check_Buffer_Status 表前者的執行function中呼叫了後者。
 	
-
-
+#### 其他注意事項:
+	1.同一個cycle中，剛issue完的intruction不可以直接
